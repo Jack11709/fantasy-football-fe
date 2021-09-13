@@ -1,9 +1,19 @@
-import { Counter } from './features/counter/Counter'
+import { useAppSelector, useAppDispatch } from './app/hooks'
+import { selectFormation, changeFormation, Formation } from './features/formation/formationSlice'
 
 export default function App() {
+  const currentFormation = useAppSelector(selectFormation)
+  const dispatch = useAppDispatch()
+
   return (
     <div>
-      <Counter />
+      <h2>Current Formation: {currentFormation}</h2>
+      <p>Switch:</p>
+      {Object.values(Formation).map(formation => (
+        <div key={formation}>
+          <button onClick={() => dispatch(changeFormation(formation))}>{formation}</button>
+        </div>
+      ))}
     </div>
   )
 }

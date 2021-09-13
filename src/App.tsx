@@ -1,11 +1,9 @@
 import { Counter } from './features/counter/Counter'
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
+    <div>
       <Counter />
     </div>
   )
 }
-
-export default App

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Select, VStack } from '@chakra-ui/react'
+import { Box, Button, Select, VStack , Input } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { Player, useGetPlayersQuery } from '../../services/players'
 import { addPlayerToTeam, selectTeam, removePlayerFromTeam } from '../team/teamSlice'
@@ -32,28 +32,35 @@ function PlayerCard({ player }: { player: Player}) {
 
 export default function PlayerList() {
   const { data: players, isLoading, isError } = useGetPlayersQuery()
-  const [filterOption, setFilterOption] = React.useState('all')
+  const [filterPosition, setFilterOption] = React.useState('all')
+  const [filterName, setFilterName] = React.useState('')
 
   const handleFilterPlayers = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterOption(e.target.value)
   }
 
+  const handlefilterName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterName(e.target.value)
+  }
+
   const filteredPlayers = React.useMemo(() => {
     if (!players) return []
+    const re = new RegExp(filterName)
     return players.filter(player => {
-      return player.position === filterOption || filterOption === 'all'
+      return (player.position === filterPosition || filterPosition === 'all') && re.test(player.name)
     })
-  }, [filterOption, players])
+  }, [filterPosition,filterName, players])
 
   return (
     <VStack spacing={10}>
-      <Select onChange={handleFilterPlayers} value={filterOption}>
+      <Select onChange={handleFilterPlayers} value={filterPosition}>
         <option value="all">All</option>
         <option value="GK">Goalkeepers</option>
         <option value="DF">Defenders</option>
         <option value="MF">Midfielders</option>
         <option value="FW">Forwards</option>
       </Select>
+      <Input placeholder="Search by player name" value={filterName} onChange={handlefilterName}/>
       {isLoading && <h2>...loading players</h2>}
       {isError && <h2>Something went wrong</h2>}
       {players &&

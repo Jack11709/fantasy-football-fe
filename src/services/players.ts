@@ -5,6 +5,9 @@ export interface Player {
   name: string
   position: string
   totalPoints: 0
+  image: string
+  thumbnail: string
+  club: string
 }
 
 export const playerApi = createApi({

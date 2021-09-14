@@ -10,7 +10,7 @@ function Line({ players }: { players: (Player | null)[]}) {
         .map((player, i) => {
           if (!player) return <Avatar key={i} />
 
-          return <Avatar key={i} name={player.name}/>
+          return <Avatar key={i} src={player.thumbnail} />
         })}
     </HStack>
   )
@@ -26,7 +26,7 @@ export default function Team() {
       <Line players={currentTeam.defenders}/>
       <div>
         {currentTeam.goalkeeper ?
-          <Avatar name={currentTeam.goalkeeper.name} />
+          <Avatar name={currentTeam.goalkeeper.name} src={currentTeam.goalkeeper.image}/>
           :
           <Avatar />
         }

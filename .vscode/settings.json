@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#2ab152",
+        "titleBar.activeBackground": "#2ab152",
+        "titleBar.inactiveBackground": "#2ab152",
+        "statusBar.foreground": "#000",
+        "titleBar.inactiveForeground": "#000",
+        "titleBar.activeForeground": "#000",
+    },
+    "window.title": "FANTASY FE"
+}

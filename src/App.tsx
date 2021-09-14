@@ -1,19 +1,24 @@
-import { useAppSelector, useAppDispatch } from './app/hooks'
-import { selectFormation, changeFormation, Formation } from './features/formation/formationSlice'
+import { Box, Flex, Stack } from '@chakra-ui/react'
+
+import Pitch from './features/team/Team'
+import FormationSelect from './features/team/FormationSelect'
+import PlayerList from './features/players/PlayerList'
+
 
 export default function App() {
-  const currentFormation = useAppSelector(selectFormation)
-  const dispatch = useAppDispatch()
-
   return (
-    <div>
-      <h2>Current Formation: {currentFormation}</h2>
-      <p>Switch:</p>
-      {Object.values(Formation).map(formation => (
-        <div key={formation}>
-          <button onClick={() => dispatch(changeFormation(formation))}>{formation}</button>
-        </div>
-      ))}
-    </div>
+    <Flex minH={'100vh'}>
+      <Box
+        p={5}
+        w={300}
+        borderX={'1px solid black'}
+      >
+        <PlayerList />
+      </Box>
+      <Stack spacing={10} p={20}>
+        <Pitch />
+        <FormationSelect />
+      </Stack>
+    </Flex>
   )
 }

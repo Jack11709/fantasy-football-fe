@@ -1,10 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import formationReducer from '../features/formation/formationSlice'
+import teamReducer from '../features/team/teamSlice'
+import { playerApi } from '../services/players'
 
 export const store = configureStore({
   reducer: {
-    formation: formationReducer,
+    team: teamReducer,
+    [playerApi.reducerPath]: playerApi.reducer,
   },
+  middleware: (getDefaultMiddleware) => (
+    getDefaultMiddleware().concat(playerApi.middleware)
+  ),
 })
 
 export type AppDispatch = typeof store.dispatch;

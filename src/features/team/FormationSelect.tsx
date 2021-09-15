@@ -1,9 +1,9 @@
 import { Button, Select, Box } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { Formation } from '../../types'
 import {
   selectFormation,
-  changeFormation,
-  Formation
+  changeFormation
 } from './teamSlice'
 
 export default function FormationSelect() {

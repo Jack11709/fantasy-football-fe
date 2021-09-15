@@ -1,22 +1,22 @@
-import { Box, Flex, Stack, VStack } from '@chakra-ui/react'
+import { Box, Flex, VStack } from '@chakra-ui/react'
 
-import Pitch from './features/team/Team'
+import Team from './features/team/Team'
 import FormationSelect from './features/team/FormationSelect'
 import PlayerList from './features/players/PlayerList'
 
 
 export default function App() {
   return (
-    <Flex minH={'100vh'}>
-      <Box p={5} w={300} borderX={'1px solid black'}>
+    <Flex>
+      <Box p={5} w={350} borderWidth="1px">
         <PlayerList />
       </Box>
-      <Stack spacing={10} p={20} position={'relative'}>
-        <VStack position={'fixed'} spacing={10}>
-          <Pitch />
+      <Flex justify={'center'} width={'100%'} p={20}>
+        <VStack spacing={10}>
+          <Team />
           <FormationSelect />
         </VStack>
-      </Stack>
+      </Flex>
     </Flex>
   )
 }

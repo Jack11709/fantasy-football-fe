@@ -1,37 +1,34 @@
 import React from 'react'
-import { Box, Button, Select, VStack , Input } from '@chakra-ui/react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { Player, useGetPlayersQuery } from '../../services/players'
-import { addPlayerToTeam, selectTeam, removePlayerFromTeam } from '../team/teamSlice'
+import { Select, VStack , Input, Skeleton } from '@chakra-ui/react'
+import { useAppSelector } from '../../app/hooks'
+import { useGetPlayersQuery } from '../../services/players'
+import { selectTeam } from '../team/teamSlice'
+import { FixedSizeList as List } from 'react-window'
+import PlayerCard from './PlayerCard'
+import { PickedPlayer } from '../../types'
 
-function PlayerCard({ player }: { player: Player}) {
-  const dispatch = useAppDispatch()
-  const { goalkeeper, defenders, midfielders, forwards } = useAppSelector(selectTeam)
-  const isPicked = [goalkeeper, ...defenders, ...midfielders, ...forwards].some(member => {
-    if (member) return member.id === player.id
-    return false
-  })
-
+function Loading() {
   return (
-    <Box key={player.id}>
-      <h3>
-        {player.name} - {player.position}
-      </h3>
-      {!isPicked ? (
-        <Button onClick={() => dispatch(addPlayerToTeam(player))}>
-          Add to Team
-        </Button>
-      ) : (
-        <Button onClick={() => dispatch(removePlayerFromTeam(player))}>
-          Remove from Team
-        </Button>
-      )}
-    </Box>
+    <>
+      {Array(10).fill('').map((_, i) => (
+        <Skeleton key={i} borderWidth="1px" borderRadius="lg" w={300} h={135} />
+      ))}
+    </>
+  )
+}
+
+function Row({ index, style, data }: { index: number, style: React.CSSProperties, data: PickedPlayer[]}) {
+  const player = data[index]
+  return (
+    <div style={style}>
+      <PlayerCard player={player}/>
+    </div>
   )
 }
 
 export default function PlayerList() {
   const { data: players, isLoading, isError } = useGetPlayersQuery()
+  const { goalkeeper, defenders, midfielders, forwards } = useAppSelector(selectTeam)
   const [filterPosition, setFilterOption] = React.useState('all')
   const [filterName, setFilterName] = React.useState('')
 
@@ -47,12 +44,23 @@ export default function PlayerList() {
     if (!players) return []
     const re = new RegExp(filterName)
     return players.filter(player => {
-      return (player.position === filterPosition || filterPosition === 'all') && re.test(player.name)
-    })
-  }, [filterPosition,filterName, players])
+      return (
+        (player.position === filterPosition || filterPosition === 'all') &&
+        re.test(player.name)
+      )
+    }).map(player => ({
+      ...player,
+      isPicked: [goalkeeper, ...defenders, ...midfielders, ...forwards].some(
+        member => {
+          if (member) return member.id === player.id
+          return false
+        }
+      ),
+    }))
+  }, [players, filterName, filterPosition, goalkeeper, defenders, midfielders, forwards])
 
   return (
-    <VStack spacing={10}>
+    <VStack spacing={5}>
       <Select onChange={handleFilterPlayers} value={filterPosition}>
         <option value="all">All</option>
         <option value="GK">Goalkeepers</option>
@@ -60,11 +68,24 @@ export default function PlayerList() {
         <option value="MF">Midfielders</option>
         <option value="FW">Forwards</option>
       </Select>
-      <Input placeholder="Search by player name" value={filterName} onChange={handlefilterName}/>
-      {isLoading && <h2>...loading players</h2>}
+      <Input
+        placeholder="Search by player name"
+        value={filterName}
+        onChange={handlefilterName}
+      />
+      {isLoading && <Loading />}
       {isError && <h2>Something went wrong</h2>}
       {players &&
-          filteredPlayers.map(player => <PlayerCard key={player.id} player={player} />)}
+      <List
+        height={1200}
+        itemCount={filteredPlayers.length}
+        itemSize={180}
+        width={300}
+        style={{ 'scrollbarWidth': 'none' }}
+        itemData={filteredPlayers}
+      >
+        {Row}
+      </List>}
     </VStack>
   )
 }

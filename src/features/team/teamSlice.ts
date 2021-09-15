@@ -1,24 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { Player } from '../../services/players'
-
-export enum Formation {
-    FiveFourOne = '5-4-1',
-    FiveThreeTwo = '5-3-2',
-    FourFiveOne = '4-5-1',
-    FourFourTwo = '4-4-2',
-    FourThreeThree = '4-3-3',
-    ThreeFiveTwo = '3-5-2',
-    ThreeFourThree = '3-4-3',
-}
-
-export interface TeamState {
-    formation: Formation
-    goalkeeper: null | Player
-    defenders: (Player | null)[],
-    midfielders: (Player | null)[],
-    forwards: (Player | null)[],
-}
+import { Player, TeamState, Formation } from '../../types'
 
 const initialState: TeamState = {
   formation: Formation.FourFourTwo,

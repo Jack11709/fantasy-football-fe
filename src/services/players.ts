@@ -1,14 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-export interface Player {
-  id: number,
-  name: string
-  position: string
-  totalPoints: 0
-  image: string
-  thumbnail: string
-  club: string
-}
+import { Player } from '../types'
 
 export const playerApi = createApi({
   reducerPath: 'playerApi',
